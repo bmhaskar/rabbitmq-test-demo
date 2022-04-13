@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { ModuleMocker } from 'jest-mock';
-import { AppService } from "./app.service";
 import { AppAnotherService } from "./app.another.service";
 
-const moduleMocker = new ModuleMocker(global);
+
 
 describe('AppController', () => {
   let appController: AppController;
