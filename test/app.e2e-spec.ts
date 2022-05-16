@@ -14,31 +14,6 @@ const amqplib = new FakeAmqp();
 
 jest.setTimeout(20000000)
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication;
-  let server;
-  let amqpConnection: AmqpConnection;
-  const asyncQueue = `${process.env.NODE_ENV}-${QUEUE_NAME}`;
-  const expectedResponseBody = 'Hello World!';
-
-  beforeEach(async () => {
-    jest.spyOn(origAmpq, 'connect').mockImplementation(((url: string) => {
-      console.log('Intercepted ', url);
-      return amqplib.connect(url);
-    }) as any);
-    amqplib.reset();
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
-
-
-});
-
 describe('Microservice e2e', () => {
   let appMicroservice: INestApplication;
   let server;
@@ -90,8 +65,9 @@ describe('Microservice e2e', () => {
     await appMicroservice.close();
   });
   it('Receives message', async () => {
-
+    const getHelloReturnValue = 'Hello World!';
     const response = await client.send( 'hello', {test: 'test'}).toPromise()
-    console.log(response);
+    expect(response).toBe(getHelloReturnValue)
+
   });
 });
