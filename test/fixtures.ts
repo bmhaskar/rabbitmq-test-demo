@@ -187,7 +187,7 @@ export class FakeChannel extends EventEmitter {
         content: Buffer,
         _options?: Options.Publish,
       ): boolean => {
-        this.emit('sendToQueue', content);
+        // this.emit('sendToQueue', content);
 
         queues[_queue].add({
           content,
@@ -195,7 +195,7 @@ export class FakeChannel extends EventEmitter {
             exchange: '',
             routingKey: _queue
           },
-          properties: { headers: _options?.headers || {} }
+          properties: { ..._options, headers: _options?.headers || {} }
         });
 
         return true;
@@ -351,6 +351,9 @@ export class FakeChannel extends EventEmitter {
     .fn()
     .mockImplementation(
       async (queueName, consumer): Promise<Replies.Consume> => {
+        if(!queues[queueName]) {
+          queues[queueName] = createQueue();
+        }
         queues[queueName]?.addConsumer(consumer);
         return { consumerTag: queueName };
       },
@@ -406,14 +409,14 @@ export class FakeConfirmChannel extends FakeChannel {
         _options?: Options.Publish,
         callback?: (err: any, ok: Replies.Empty) => void,
       ): boolean => {
-        this.emit('sendToQueue', content);
+        // this.emit('sendToQueue', content);
         queues[_queue].add({
           content,
           fields: {
             exchange: '',
             routingKey: _queue
           },
-          properties: { headers: _options?.headers || {} }
+          properties: { ..._options, headers: _options?.headers || {} }
         });
 
         callback?.(null, {});

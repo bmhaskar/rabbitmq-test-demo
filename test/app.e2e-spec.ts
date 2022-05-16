@@ -36,13 +36,6 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  // it('/ (GET)', () => {
-  //   return request(app.getHttpServer())
-  //     .get('/')
-  //     .expect(200)
-  //     .expect(expectedResponseBody);
-  // });
-
 
 });
 
@@ -99,5 +92,6 @@ describe('Microservice e2e', () => {
   it('Receives message', async () => {
 
     const response = await client.send( 'hello', {test: 'test'}).toPromise()
+    console.log(response);
   });
 });
