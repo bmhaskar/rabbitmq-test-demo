@@ -237,6 +237,8 @@ export class FakeChannel extends EventEmitter {
       if (!queue) {
         queue = generateRandomQueueName();
       }
+
+      if(!queues[queue])
       queues[queue] = createQueue();
 
       return {
@@ -374,6 +376,7 @@ export class FakeConfirmChannel extends FakeChannel {
       ): boolean => {
 
         this.emit('publish', content);
+
         const exchange = exchanges[_exchange];
         const queueNames = exchange.getTargetQueues(_routingKey, _options);
         const message = {
@@ -404,6 +407,15 @@ export class FakeConfirmChannel extends FakeChannel {
         callback?: (err: any, ok: Replies.Empty) => void,
       ): boolean => {
         this.emit('sendToQueue', content);
+        queues[_queue].add({
+          content,
+          fields: {
+            exchange: '',
+            routingKey: _queue
+          },
+          properties: { headers: _options?.headers || {} }
+        });
+
         callback?.(null, {});
         return true;
       },

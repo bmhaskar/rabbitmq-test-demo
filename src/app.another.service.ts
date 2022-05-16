@@ -7,7 +7,7 @@ export class AppAnotherService {
     return 'Hello World!';
   }
   @RabbitSubscribe({
-    exchange: 'exchange1',
+    exchange: 'test-exchange1',
     routingKey: 'subscribe-route1',
     queue: 'subscribe-queue',
   })
@@ -16,7 +16,7 @@ export class AppAnotherService {
   }
 
   @RabbitSubscribe({
-    exchange: 'exchange1',
+    exchange: 'test-exchange1',
     routingKey: 'subscribe-route2',
   })
   public async messagePerInstanceHandler(msg: {}) {
